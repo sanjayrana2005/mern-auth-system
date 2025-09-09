@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from "framer-motion"
 import { Mail, Lock, Loader, Eye, EyeOff } from 'lucide-react'
 import Input from '../components/input'
@@ -15,7 +15,8 @@ const LoginPage = () => {
 
   const navigate = useNavigate()
 
-  const {login,isLoading,error} = useAuthStore()
+  const { login, isLoading, error } = useAuthStore()
+  const [errorMsg, setErrorMsg] = useState(error)
 
   const handleInputOnchange = (event) => {
     const { name, value } = event.target
@@ -29,10 +30,25 @@ const LoginPage = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-   const response =  await login(user.email,user.password)
+    const response = await login(user.email, user.password)
     toast.success(response.message || "Login successfully")
     navigate("/")
   }
+
+   useEffect(() => {
+    if (error) {
+      setErrorMsg(error)
+      // clear error after 3s
+       setTimeout(() => {
+        setErrorMsg("")
+       },2000)
+      return 
+    }
+  }, [error])
+
+  // setTimeout(() => {
+  //   setErrorMsg("");
+  // }, 2000);
 
   return (
     <motion.div
@@ -65,10 +81,10 @@ const LoginPage = () => {
             onChange={handleInputOnchange}
           />
 
-          <div className='flex items-center mb-2'>
+          <div className='flex items-center mb-2 justify-between'>
             <Link to="/forgot-password" className='text-sm text-green-400 hover:underline'>Forgot password?</Link>
+          {errorMsg && <p className='text-red-500 text-sm'>{errorMsg}</p>}
           </div>
-          {error && <p className='text-red-500 text-sm mb-2'>{error}</p>}
 
           <motion.button
             whileHover={{ scale: 1.02 }}
@@ -76,7 +92,7 @@ const LoginPage = () => {
             className='w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200 hover:cursor-pointer'
             type='submit'
           >
-            {isLoading ? <Loader className='w-6 h-6 animate-spin text-center mx-auto'/> : "Login"}
+            {isLoading ? <Loader className='w-6 h-6 animate-spin text-center mx-auto' /> : "Login"}
           </motion.button>
         </form>
       </div>
