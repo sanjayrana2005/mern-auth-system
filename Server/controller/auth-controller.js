@@ -4,7 +4,6 @@ const generateTokenAndSetCookie = require("../utils/generateTokenAndSetCookie")
 const { sendEmail, sendWelcomeEmail, sendPasswordResetMail, sendSuccessEmail,sendSuccessChangePasswordEmail } = require("../config/nodemailer")
 const crypto = require("crypto")
 const TempUserModel = require("../models/temperory-user-model")
-const { log } = require("console")
 require("dotenv").config()
 
 // signup controller
@@ -363,7 +362,6 @@ const resetPassword = async (req, res) => {
 
 const resendOTP = async (req, res) => {
     const { email } = req.body
-    console.log("body", req.body)
     try {
         const user = await UserModel.findOne({ email })
 
@@ -457,7 +455,6 @@ const changePassword = async (req, res) => {
 
 
     } catch (error) {
-        console.log("error",error)
         res.status(500).json({
             message: error.message || "Server error",
             success: false
