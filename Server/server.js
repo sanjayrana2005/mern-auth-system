@@ -6,6 +6,7 @@ require("dotenv").config()
 const cors = require("cors")
 const cron = require("node-cron")
 const TempUserModel = require("./models/temperory-user-model")
+// import path from "path"
 
 
 const app = express()
@@ -16,11 +17,18 @@ app.use(cors({
 }))
 
 const PORT = process.env.PORT || 8080
+// const __dirname = path.resolve()
 app.use(express.json())  // allwos to parse incoming requests in JSON body : req.body
 
 //signup,login or logout routes
 app.use("/api/auth",authRouter)
+// if(process.env.NODE_ENV === "production"){
+//     app.use(express.static(path.join(__dirname,"/Frontend/dist")))
 
+//     app.get("*", (req,res)=>{
+//         res.sendFile(path.resolve(__dirname,"frontend","dist","index.html"))
+//     })
+// }
 
 // DB connection
 connectDB().then(() => {
