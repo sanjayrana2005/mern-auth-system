@@ -20,12 +20,15 @@ export const useAuthStore = create((set, get) => ({
                 password
             })
             localStorage.setItem("pendingEmail", response.data.email);
-            set({ isAuthenticated: false, isLoading: false })
+            set({ isAuthenticated: false,})
             return response.data.email
         } catch (error) {
             set({ error: error.response.data.message || "Error signing up", isLoading: false })
             throw error
         }
+        finally {
+        set({ isLoading: false }); // ✅ always stop loader
+    }
     },
 
     resendOtpEmail: async (email) => {
@@ -34,9 +37,12 @@ export const useAuthStore = create((set, get) => ({
             return response.data.message; // e.g. "OTP sent again"
         } catch (error) {
             const errMsg = error?.response?.data?.message || "Failed to resend OTP"
-            set({ error: errMsg, isLoading: false })
+            set({ error: errMsg})
             throw new Error(errMsg)   // ✅ throw clean message
         }
+        finally {
+        set({ isLoading: false }); // ✅ always stop loader
+    }
     },
 
     resendOTP: async (email) => {
@@ -45,21 +51,25 @@ export const useAuthStore = create((set, get) => ({
             return response.data.message; // e.g. "OTP sent again"
         } catch (error) {
             const errMsg = error?.response?.data?.message || "Failed to resend OTP"
-            set({ error: errMsg, isLoading: false })
+            set({ error: errMsg })
             throw new Error(errMsg)   // ✅ throw clean message
-        }
+        }finally {
+        set({ isLoading: false }); // ✅ always stop loader
+    }
     },
 
     verifyEmail: async (code) => {
         set({ isLoading: true, error: null })
         try {
             const response = await Axios.post("/auth/verify-email", { code })
-            set({ user: response.data.user, isAuthenticated: true, isLoading: false })
+            set({ user: response.data.user, isAuthenticated: true })
             return response.data
         } catch (error) {
             set({ error: error.response.data.message || "Error Verifying email", isLoading: false })
             throw error
-        }
+        }finally {
+        set({ isLoading: false }); // ✅ always stop loader
+    }
     },
 
     login: async (email, password) => {
@@ -72,9 +82,11 @@ export const useAuthStore = create((set, get) => ({
             set({ user: response.data.user, isAuthenticated: true, isLoading: false, error: response.message })
             return response.data
         } catch (error) {
-            set({ error: error?.response?.data?.message || "Error loging up", isLoading: false })
+            set({ error: error?.response?.data?.message || "Error loging up"})
             throw error
-        }
+        }finally {
+        set({ isLoading: false }); // ✅ always stop loader
+    }
     },
 
     checkAuth: async () => {
@@ -96,9 +108,11 @@ export const useAuthStore = create((set, get) => ({
             set({ user: null, isAuthenticated: false, error: null, isLoading: false, message: response.data.message, verifiedEmail: null, })
             return response.data
         } catch (error) {
-            set({ error: "Error logging out", isLoading: false })
+            set({ error: "Error logging out"})
             throw error
-        }
+        }finally {
+        set({ isLoading: false }); // ✅ always stop loader
+    }
     },
 
     forgotPassword: async (email) => {
@@ -109,9 +123,11 @@ export const useAuthStore = create((set, get) => ({
             return response.data
         } catch (error) {
             const errMsg = error?.response?.data?.message || "Error sending reset password email"
-            set({ isLoading: false, error: errMsg })
+            set({error: errMsg })
             throw new Error(errMsg)
-        }
+        }finally {
+        set({ isLoading: false }); // ✅ always stop loader
+    }
 
     },
 
@@ -122,9 +138,12 @@ export const useAuthStore = create((set, get) => ({
             set({ user: response.data.user, message: response.data.message, otpVerified: true, isLoading: false, verifiedEmail: email })
             return response.data
         } catch (error) {
-            set({ error: error.response.data.message || "Error Verifying email", isLoading: false })
+            set({ error: error.response.data.message || "Error Verifying email" })
             throw error
         }
+        finally {
+        set({ isLoading: false }); // ✅ always stop loader
+    }
     },
 
     resetPassword: async (password) => {
@@ -138,12 +157,14 @@ export const useAuthStore = create((set, get) => ({
 
             // if user logged in then token can be null
             const response = await Axios.post(`/auth/reset-password`, { email: verifiedEmail, password })
-            set({ user: response.data.user, message: response.data.message, isLoading: false, verifiedEmail: null })
+            set({ user: response.data.user, message: response.data.message, verifiedEmail: null })
             return response.data
         } catch (error) {
             set({ error: error.response.data.message || "Error resetting password" })
             throw error
-        }
+        }finally {
+        set({ isLoading: false }); // ✅ always stop loader
+    }
     },
 
     changePassword: async (currentPassword, newPassword) => {
