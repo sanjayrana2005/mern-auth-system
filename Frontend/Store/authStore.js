@@ -72,7 +72,7 @@ export const useAuthStore = create((set, get) => ({
             set({ user: response.data.user, isAuthenticated: true, isLoading: false, error: response.message })
             return response.data
         } catch (error) {
-            set({ error: error.response.data.message || "Error loging up", isLoading: false })
+            set({ error: error?.response?.data?.message || "Error loging up", isLoading: false })
             throw error
         }
     },
