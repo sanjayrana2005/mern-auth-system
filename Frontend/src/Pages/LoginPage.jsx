@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { motion } from "framer-motion"
 import { Mail, Lock, Loader, Eye, EyeOff } from 'lucide-react'
-import Input from '../components/input'
+import Input from '../components/Input'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../Store/authStore'
 import toast from 'react-hot-toast'
