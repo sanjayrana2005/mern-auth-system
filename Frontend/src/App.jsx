@@ -11,6 +11,7 @@ import LoadingSpinner from "./components/LoadingSpinner"
 import ForgotPassword from "./Pages/ForgotPassword"
 import ResetPassword from "./Pages/ResetPassword"
 import ChangePassword from "./Pages/ChangePassword"
+import PageNotFound from "./Pages/PageNotFound"
 
 
 
@@ -87,7 +88,8 @@ function App() {
         } />
 
         <Route path="/reset-password" element={<ResetPassword/>}/>
-        <Route path="//change-password" element={<ChangePassword/>}/>
+        <Route path="/change-password" element={<ChangePassword/>}/>
+        <Route path="*" element={<PageNotFound/>}/>
 
       </Routes>
 

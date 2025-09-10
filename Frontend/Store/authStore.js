@@ -14,7 +14,7 @@ export const useAuthStore = create((set, get) => ({
     signup: async (name, email, password) => {
         set({ isLoading: true, error: null })
         try {
-            const response = await Axios.post("auth/signup", {
+            const response = await Axios.post("/api/auth/signup", {
                 name,
                 email,
                 password
@@ -33,7 +33,7 @@ export const useAuthStore = create((set, get) => ({
 
     resendOtpEmail: async (email) => {
         try {
-            const response = await Axios.post("/auth/resend-code", { email });
+            const response = await Axios.post("/api/auth/resend-code", { email });
             return response.data.message; // e.g. "OTP sent again"
         } catch (error) {
             const errMsg = error?.response?.data?.message || "Failed to resend OTP"
@@ -47,7 +47,7 @@ export const useAuthStore = create((set, get) => ({
 
     resendOTP: async (email) => {
         try {
-            const response = await Axios.post("/auth/resend-otp", { email });
+            const response = await Axios.post("/api/auth/resend-otp", { email });
             return response.data.message; // e.g. "OTP sent again"
         } catch (error) {
             const errMsg = error?.response?.data?.message || "Failed to resend OTP"
@@ -61,7 +61,7 @@ export const useAuthStore = create((set, get) => ({
     verifyEmail: async (code) => {
         set({ isLoading: true, error: null })
         try {
-            const response = await Axios.post("/auth/verify-email", { code })
+            const response = await Axios.post("/api/auth/verify-email", { code })
             set({ user: response.data.user, isAuthenticated: true })
             return response.data
         } catch (error) {
@@ -75,7 +75,7 @@ export const useAuthStore = create((set, get) => ({
     login: async (email, password) => {
         set({ isLoading: true, error: null })
         try {
-            const response = await Axios.post("auth/login", {
+            const response = await Axios.post("/api/auth/login", {
                 email,
                 password
             })
@@ -93,7 +93,7 @@ export const useAuthStore = create((set, get) => ({
         await new Promise((resolve) => setTimeout(resolve, 2000))
         set({ isCheckingAuth: true, error: null })
         try {
-            const response = await Axios.get("/auth/check-auth")
+            const response = await Axios.get("/api/auth/check-auth")
             set({ user: response.data.user, isAuthenticated: true, isCheckingAuth: false })
         } catch (error) {
             set({ error: null, isCheckingAuth: false })
@@ -104,7 +104,7 @@ export const useAuthStore = create((set, get) => ({
     logout: async () => {
         set({ isLoading: true, error: null })
         try {
-            const response = await Axios.post("/auth/logout")
+            const response = await Axios.post("/api/auth/logout")
             set({ user: null, isAuthenticated: false, error: null, isLoading: false, message: response.data.message, verifiedEmail: null, })
             return response.data
         } catch (error) {
@@ -118,7 +118,7 @@ export const useAuthStore = create((set, get) => ({
     forgotPassword: async (email) => {
         set({ isLoading: true, error: null, message: null })
         try {
-            const response = await Axios.post("/auth/forgot-password", { email })
+            const response = await Axios.post("/api/auth/forgot-password", { email })
             set({ message: response?.data?.message, isLoading: false, })
             return response.data
         } catch (error) {
@@ -134,7 +134,7 @@ export const useAuthStore = create((set, get) => ({
     verifyOTP: async (otp, email) => {
         set({ isLoading: true, error: null })
         try {
-            const response = await Axios.post("/auth/verify-otp", { otp })
+            const response = await Axios.post("/api/auth/verify-otp", { otp })
             set({ user: response.data.user, message: response.data.message, otpVerified: true, isLoading: false, verifiedEmail: email })
             return response.data
         } catch (error) {
@@ -156,7 +156,7 @@ export const useAuthStore = create((set, get) => ({
         try {
 
             // if user logged in then token can be null
-            const response = await Axios.post(`/auth/reset-password`, { email: verifiedEmail, password })
+            const response = await Axios.post(`/api/auth/reset-password`, { email: verifiedEmail, password })
             set({ user: response.data.user, message: response.data.message, verifiedEmail: null })
             return response.data
         } catch (error) {
@@ -170,7 +170,7 @@ export const useAuthStore = create((set, get) => ({
     changePassword: async (currentPassword, newPassword) => {
         set({ isLoading: true, error: null, message: null })
         try {
-            const response = await Axios.post("/auth/change-password", { currentPassword, newPassword },
+            const response = await Axios.post("/api/auth/change-password", { currentPassword, newPassword },
                 {
                     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
                 }
@@ -185,7 +185,4 @@ export const useAuthStore = create((set, get) => ({
         set({ isLoading: false }); // ✅ ensures loader stops
     }
     }
-
-
-
 }))
