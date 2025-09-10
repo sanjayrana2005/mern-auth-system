@@ -6,6 +6,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import toast from "react-hot-toast"
 import { useRef } from 'react'
+import Input from '../components/Input'
+
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("")
