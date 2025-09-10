@@ -48,3 +48,6 @@ connectDB().then(() => {
         await TempUserModel.deleteMany({ verificationTokenExpiredAt: { $lt: Date.now() } })
     })
 })
+
+// Export app for Vercel
+module.exports = app;
