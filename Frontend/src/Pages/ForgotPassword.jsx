@@ -104,6 +104,7 @@ const ForgotPassword = () => {
             const msg = await resendOTP(email); // 👈 replace with real email
             setHasResent(true);
             toast.success(msg?.message)
+            setCode(["", "", "", "", "", ""]);
         } catch (error) {
             toast.error(error?.response?.message);
         } finally {

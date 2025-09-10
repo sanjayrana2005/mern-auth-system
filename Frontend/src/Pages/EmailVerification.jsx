@@ -101,6 +101,8 @@ const EmailVerification = () => {
             const msg = await resendOtpEmail(userEmail); // 👈 replace with real email
             setMessage(msg);
             setHasResent(true);
+            toast.success(msg?.message)
+            setCode(["", "", "", "", "", ""]);
         } catch (error) {
             setMessage(error);
         } finally {
